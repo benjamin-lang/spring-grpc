@@ -1,0 +1,3 @@
+module de.grid.springgrpc.domain {
+    exports de.grid.springgrpc.domain;
+}

@@ -1,0 +1,15 @@
+module de.grid.springgrpc.grpc {
+    requires com.google.protobuf;
+    requires com.google.common;
+
+    requires grpc.spring.boot.starter;
+    requires grpc.stub;
+//    requires grpc.context;
+    requires grpc.api;
+    requires grpc.protobuf;
+
+    requires java.annotation;
+
+//    opens de.grid.springgrpc.grpc to spring.core;
+//    exports de.grid.springgrpc.grpc;
+}

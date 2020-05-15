@@ -1,0 +1,18 @@
+module de.grid.springgrpc.application {
+    requires de.grid.springgrpc.persistence;
+
+    requires java.sql;
+    requires spring.boot;
+    requires spring.boot.autoconfigure;
+    requires spring.beans;
+    requires spring.context;
+
+    requires org.slf4j;
+    requires org.apache.logging.log4j;
+
+    exports de.grid.springgrpc;
+    exports de.grid.springgrpc.application;
+
+    opens de.grid.springgrpc;
+    opens de.grid.springgrpc.application to spring.core;
+}

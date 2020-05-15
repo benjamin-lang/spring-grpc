@@ -1,0 +1,13 @@
+root = true
+
+[*] # common settings
+indent_style = space
+indent_size = 4
+max_line_length = 160
+trim_trailing_whitespace = true
+
+#[*.java] # java specific settings
+#[*.xml] # java specific settings
+
+[{*.yml, *.xml}] # yml specific settings
+indent_size = 2

@@ -1,0 +1,16 @@
+module de.grid.springgrpc.persistence {
+    requires transitive de.grid.springgrpc.domain;
+
+    requires transitive java.persistence;
+    requires net.bytebuddy;
+    requires spring.context;
+    requires spring.data.jpa;
+    requires spring.tx;
+    requires com.fasterxml.classmate;
+    requires java.xml.bind;
+    requires jdk.unsupported;
+
+    exports de.grid.springgrpc.persistence;
+
+    opens de.grid.springgrpc.persistence to org.hibernate.orm.core, spring.core;
+}
