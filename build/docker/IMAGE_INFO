@@ -1,0 +1,12 @@
+
+#### image informations ####
+#
+# service-name:   spring-grpc
+# description:    A simple spring boot application with grpc and protocol buffers
+# git-repo:       ssh://git@github.com:benjamin-lang/spring-grpc.git
+#
+# command:        /opt/app/run-java.sh
+#
+# mandatory environment variables:
+#
+

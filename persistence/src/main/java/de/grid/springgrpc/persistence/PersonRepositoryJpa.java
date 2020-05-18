@@ -23,8 +23,6 @@ public class PersonRepositoryJpa extends SimpleJpaRepository<PersonEntity, UUID>
     public void persist(Person person)
     {
         save(PersonEntity.of(person));
-
-        List<Person> people = queryAll();
     }
 
     @Override

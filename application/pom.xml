@@ -7,33 +7,46 @@
   <parent>
     <groupId>de.grid</groupId>
     <artifactId>spring-grpc</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>${revision}</version>
   </parent>
 
   <groupId>de.grid.springgrpc</groupId>
   <artifactId>application</artifactId>
   <packaging>jar</packaging>
+  <version>${revision}</version>
 
   <dependencies>
 
     <dependency>
       <groupId>de.grid.springgrpc</groupId>
       <artifactId>persistence</artifactId>
-      <version>0.0.1-SNAPSHOT</version>
+      <version>${revision}</version>
     </dependency>
 
     <dependency>
       <groupId>de.grid.springgrpc</groupId>
       <artifactId>domain</artifactId>
-      <version>0.0.1-SNAPSHOT</version>
+      <version>${revision}</version>
     </dependency>
 
     <dependency>
       <groupId>de.grid.springgrpc</groupId>
       <artifactId>grpc</artifactId>
-      <version>0.0.1-SNAPSHOT</version>
+      <version>${revision}</version>
     </dependency>
 
   </dependencies>
+
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-maven-plugin</artifactId>
+        <configuration>
+          <mainClass>de.grid.springgrpc.GrpcDemoApplication</mainClass>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
 
 </project>
