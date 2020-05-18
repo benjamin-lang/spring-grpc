@@ -7,11 +7,12 @@
   <parent>
     <groupId>de.grid</groupId>
     <artifactId>spring-grpc</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>${revision}</version>
   </parent>
 
   <groupId>de.grid.springgrpc</groupId>
   <artifactId>domain</artifactId>
   <packaging>jar</packaging>
+  <version>${revision}</version>
 
 </project>
