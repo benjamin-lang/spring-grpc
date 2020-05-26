@@ -1,7 +1,11 @@
-package de.grid.springgrpc.grpc;
+package de.grid.springgrpc.adapter.grpc;
 
 import de.grid.grpcdemo.adapter.grpc.service.*;
 import de.grid.springgrpc.domain.PersonService;
+import io.envoyproxy.pgv.ReflectiveValidatorIndex;
+import io.envoyproxy.pgv.ValidationException;
+import io.envoyproxy.pgv.ValidatorIndex;
+import io.grpc.Status;
 import io.grpc.stub.StreamObserver;
 import org.lognet.springboot.grpc.GRpcService;
 import org.slf4j.Logger;
@@ -29,12 +33,25 @@ public class PersonServiceGrpcImpl extends PersonServiceGrpc.PersonServiceImplBa
     @Override
     public void createPerson(CreatePersonRequest request, StreamObserver<CreatePersonResponse> responseObserver)
     {
+        try
+        {
+            validatePerson(request.getPerson());
+        } catch (ValidationException e)
+        {
+            responseObserver.onError(Status.FAILED_PRECONDITION.withDescription(e.getMessage()).asException());
+        }
+
         UUID personId = personService.createNewPerson(map(request.getPerson()));
 
         responseObserver.onNext(CreatePersonResponse.newBuilder().setPersonId(personId.toString()).build());
         responseObserver.onCompleted();
     }
 
+    private void validatePerson(Person person) throws ValidationException
+    {
+        ValidatorIndex index = new ReflectiveValidatorIndex();
+        index.validatorFor(Person.class).assertValid(person);
+    }
     private de.grid.springgrpc.domain.Person map(Person person)
     {
         return new de.grid.springgrpc.domain.Person(map(person.getId())

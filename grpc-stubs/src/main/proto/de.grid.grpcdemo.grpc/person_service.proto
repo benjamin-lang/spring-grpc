@@ -5,20 +5,7 @@ package de.grid.grpcdemo.grpc.service;
 option java_package = "de.grid.grpcdemo.adapter.grpc.service";
 option java_multiple_files = true;
 
-enum Gender {
-    MALE = 0;
-    FEMALE = 1;
-    OTHER = 2;
-}
-
-message Person {
-    string id = 1;
-    string name = 2;
-    string firstname = 3;
-    string dateOfBirth = 4;
-    Gender gender = 5;
-}
-
+import "de.grid.grpcdemo.grpc/person.proto";
 
 message CreatePersonRequest {
     Person person = 1;

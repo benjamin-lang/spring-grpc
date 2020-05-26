@@ -1,0 +1,18 @@
+syntax = "proto3";
+
+package de.grid.grpcdemo.grpc.service;
+
+option java_package = "de.grid.grpcdemo.adapter.grpc.service";
+option java_multiple_files = true;
+
+message CalculatePrimeFactorsRequest {
+    int32 input = 1;
+}
+
+message CalculatePrimeFactorsResponse {
+    int32 prime_factor = 1;
+}
+
+service CalculatorService {
+    rpc CalculatePrimeFactors(CalculatePrimeFactorsRequest) returns (stream CalculatePrimeFactorsResponse) {};
+}

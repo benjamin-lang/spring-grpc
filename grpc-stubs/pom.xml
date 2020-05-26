@@ -11,13 +11,14 @@
   </parent>
 
   <groupId>de.grid.springgrpc</groupId>
-  <artifactId>grpc</artifactId>
+  <artifactId>grpc-stubs</artifactId>
   <packaging>jar</packaging>
   <version>${revision}</version>
 
   <properties>
     <os-maven-plugin.version>1.6.2</os-maven-plugin.version>
     <protobuf-maven-plugin.version>0.6.1</protobuf-maven-plugin.version>
+    <pgv.version>0.3.0</pgv.version>
   </properties>
 
   <dependencies>
@@ -29,9 +30,19 @@
     </dependency>
 
     <dependency>
-      <groupId>de.grid.springgrpc</groupId>
-      <artifactId>domain</artifactId>
-      <version>${revision}</version>
+      <groupId>io.envoyproxy.protoc-gen-validate</groupId>
+      <artifactId>pgv-java-stub</artifactId>
+      <version>${pgv.version}</version>
+      <exclusions>
+        <exclusion>
+          <groupId>com.google.protobuf</groupId>
+          <artifactId>protobuf-java-util</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>com.google.protobuf</groupId>
+          <artifactId>protobuf-java</artifactId>
+        </exclusion>
+      </exclusions>
     </dependency>
 
   </dependencies>
@@ -54,10 +65,10 @@
         <version>3.8.1</version>
         <configuration>
           <compilerArgs>
-<!--            <arg>-verbose</arg>-->
-<!--            <arg>-Xlint:all,-options,-path</arg>-->
-<!--            <arg>&#45;&#45;patch-module</arg>-->
-<!--            <arg>java.annotation=${user.home}\.m2\repository\com\google\code\findbugs\jsr305\3.0.2\jsr305-3.0.2.jar</arg>-->
+            <!--            <arg>-verbose</arg>-->
+            <!--            <arg>-Xlint:all,-options,-path</arg>-->
+            <!--            <arg>&#45;&#45;patch-module</arg>-->
+            <!--            <arg>java.annotation=${user.home}\.m2\repository\com\google\code\findbugs\jsr305\3.0.2\jsr305-3.0.2.jar</arg>-->
           </compilerArgs>
         </configuration>
       </plugin>
@@ -73,11 +84,23 @@
         </configuration>
         <executions>
           <execution>
+            <id>protoc-java</id>
             <goals>
               <goal>compile</goal>
               <goal>compile-custom</goal>
             </goals>
           </execution>
+                    <execution>
+                      <id>protoc-java-pgv</id>
+                      <goals>
+                        <goal>compile-custom</goal>
+                      </goals>
+                      <configuration>
+                        <pluginParameter>lang=java</pluginParameter>
+                        <pluginId>java-pgv</pluginId>
+                        <pluginArtifact>io.envoyproxy.protoc-gen-validate:protoc-gen-validate:${pgv.version}:exe:${os.detected.classifier}</pluginArtifact>
+                      </configuration>
+                    </execution>
         </executions>
       </plugin>
 

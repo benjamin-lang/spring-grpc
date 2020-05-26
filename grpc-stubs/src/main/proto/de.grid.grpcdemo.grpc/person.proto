@@ -1,0 +1,17 @@
+syntax = "proto3";
+
+package de.grid.grpcdemo.grpc.service;
+
+option java_package = "de.grid.grpcdemo.adapter.grpc.service";
+option java_multiple_files = true;
+
+import "validate/validate.proto";
+import "de.grid.grpcdemo.grpc/gender.proto";
+
+message Person {
+    string id = 1;
+    string name = 2 [(validate.rules).string.len = 20];
+    string firstname = 3;
+    string dateOfBirth = 4;
+    Gender gender = 5;
+}
