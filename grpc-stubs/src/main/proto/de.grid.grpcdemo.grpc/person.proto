@@ -6,7 +6,7 @@ option java_package = "de.grid.grpcdemo.adapter.grpc.service";
 option java_multiple_files = true;
 
 import "validate/validate.proto";
-import "de.grid.grpcdemo.grpc/gender.proto";
+import "common/gender.proto";
 
 message Person {
     string id = 1;

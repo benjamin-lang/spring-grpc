@@ -34,7 +34,7 @@ public class GrpcDemoApplication implements CommandLineRunner
     public void run(String... args) throws Exception
     {
         Person person = new Person(UUID.randomUUID(), "Time", "Justin", LocalDate.now(), Gender.MALE);
-        UUID personId = personService.createNewPerson(person);
+        UUID personId = personService.registerPerson(person);
 
         Optional<Person> personOpt = personService.queryPerson(personId);
         personOpt.ifPresent(readPerson -> LOGGER.info(person.toString()));

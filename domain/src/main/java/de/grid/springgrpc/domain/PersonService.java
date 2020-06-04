@@ -14,7 +14,7 @@ public class PersonService
         this.personRepository = personRepository;
     }
 
-    public UUID createNewPerson(Person person)
+    public UUID registerPerson(Person person)
     {
         if (Objects.isNull(person.getId()))
         {
@@ -32,8 +32,29 @@ public class PersonService
         return personRepository.queryById(personId);
     }
 
-    public List<Person> queryAllPersons()
+    public List<Person> queryAll()
     {
         return personRepository.queryAll();
+    }
+
+    public void removeAll()
+    {
+        personRepository.deleteAll();
+    }
+
+    public void removePerson(UUID personId)
+    {
+        personRepository.deleteById(personId);
+    }
+
+    public void gotMarried(UUID id, String newName)
+    {
+        Optional<Person> personOpt = personRepository.queryById(id);
+
+        if (personOpt.isPresent())
+        {
+            Person person = personOpt.get();
+            personRepository.persist(new Person(person.getId(), newName, person.getFirstname(), person.getDateOfBirth(), person.getGender()));
+        }
     }
 }

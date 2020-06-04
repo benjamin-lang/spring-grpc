@@ -7,6 +7,12 @@ import java.util.UUID;
 public interface PersonRepository
 {
     void persist(Person person);
+
     Optional<Person> queryById(UUID personId);
+
     List<Person> queryAll();
+
+    void deleteAll();
+
+    void deleteById(UUID personId);
 }

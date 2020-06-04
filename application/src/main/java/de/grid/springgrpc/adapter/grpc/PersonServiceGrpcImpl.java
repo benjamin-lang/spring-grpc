@@ -41,7 +41,7 @@ public class PersonServiceGrpcImpl extends PersonServiceGrpc.PersonServiceImplBa
             responseObserver.onError(Status.FAILED_PRECONDITION.withDescription(e.getMessage()).asException());
         }
 
-        UUID personId = personService.createNewPerson(map(request.getPerson()));
+        UUID personId = personService.registerPerson(map(request.getPerson()));
 
         responseObserver.onNext(CreatePersonResponse.newBuilder().setPersonId(personId.toString()).build());
         responseObserver.onCompleted();
@@ -95,7 +95,7 @@ public class PersonServiceGrpcImpl extends PersonServiceGrpc.PersonServiceImplBa
     @Override
     public void queryAllPersons(QueryAllPersonsRequest request, StreamObserver<QueryAllPersonsResponse> responseObserver)
     {
-        List<de.grid.springgrpc.domain.Person> persons = personService.queryAllPersons();
+        List<de.grid.springgrpc.domain.Person> persons = personService.queryAll();
         responseObserver.onNext(QueryAllPersonsResponse.newBuilder().addAllPersons(persons.stream().map(this::map).collect(Collectors.toList())).build());
         responseObserver.onCompleted();
     }
