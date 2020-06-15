@@ -7,7 +7,6 @@ module de.grid.springgrpc.persistence {
     requires spring.data.jpa;
     requires spring.tx;
     requires com.fasterxml.classmate;
-    requires java.xml.bind;
     requires jdk.unsupported;
 
     exports de.grid.springgrpc.persistence;

@@ -10,14 +10,21 @@ public class Person
     private final String firstname;
     private final LocalDate dateOfBirth;
     private final Gender gender;
+    private final PersonalityType personalityType;
 
-    public Person(UUID id, String name, String firstname, LocalDate dateOfBirth, Gender gender)
+    public Person(UUID id, String name, String firstname, LocalDate dateOfBirth, Gender gender, PersonalityType personalityType)
     {
         this.id = id;
         this.name = name;
         this.firstname = firstname;
         this.dateOfBirth = dateOfBirth;
         this.gender = gender;
+        this.personalityType = personalityType;
+    }
+
+    public PersonalityType getPersonalityType()
+    {
+        return personalityType;
     }
 
     public UUID getId()

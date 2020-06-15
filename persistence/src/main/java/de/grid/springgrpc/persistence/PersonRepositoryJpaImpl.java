@@ -8,31 +8,31 @@ import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
-public class PersonRepositoryImpl implements PersonRepository
+public class PersonRepositoryJpaImpl implements PersonRepository
 {
-    private final PersonRepositoryBasic personRepositoryBasic;
+    private final PersonRepositoryJpaBasic personRepositoryJpaBasic;
 
-    public PersonRepositoryImpl(PersonRepositoryBasic personRepositoryBasic)
+    public PersonRepositoryJpaImpl(PersonRepositoryJpaBasic personRepositoryJpaBasic)
     {
-        this.personRepositoryBasic = personRepositoryBasic;
+        this.personRepositoryJpaBasic = personRepositoryJpaBasic;
     }
 
     @Override
     public void persist(Person person)
     {
-        personRepositoryBasic.save(PersonEntity.of(person));
+        personRepositoryJpaBasic.save(PersonEntity.of(person));
     }
 
     @Override
     public Optional<Person> queryById(UUID personId)
     {
-        return personRepositoryBasic.findById(personId).map(PersonEntity::toPerson);
+        return personRepositoryJpaBasic.findById(personId).map(PersonEntity::toPerson);
     }
 
     @Override
     public List<Person> queryAll()
     {
-        List<PersonEntity> people = personRepositoryBasic.findAll();
+        List<PersonEntity> people = personRepositoryJpaBasic.findAll();
 
         return people.stream().map(PersonEntity::toPerson).collect(Collectors.toList());
     }
@@ -40,12 +40,12 @@ public class PersonRepositoryImpl implements PersonRepository
     @Override
     public void deleteAll()
     {
-        personRepositoryBasic.deleteAll();
+        personRepositoryJpaBasic.deleteAll();
     }
 
     @Override
     public void deleteById(UUID personId)
     {
-        personRepositoryBasic.deleteById(personId);
+        personRepositoryJpaBasic.deleteById(personId);
     }
 }

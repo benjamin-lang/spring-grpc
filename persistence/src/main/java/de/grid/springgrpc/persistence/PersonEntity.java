@@ -21,6 +21,7 @@ public class PersonEntity
 
     public PersonEntity()
     {
+        // required by jpa
     }
 
     public static PersonEntity of(Person person)
@@ -37,7 +38,7 @@ public class PersonEntity
 
     public Person toPerson()
     {
-        return new Person(this.id, this.name, this.firstname, this.dateOfBirth, this.gender);
+        return new Person(this.id, this.name, this.firstname, this.dateOfBirth, this.gender, null);
     }
 
     public UUID getId()

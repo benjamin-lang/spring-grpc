@@ -1,0 +1,40 @@
+syntax = "proto3";
+
+package de.grid.grpcdemo.grpc.service;
+
+option java_package = "de.grid.grpcdemo.adapter.grpc.service";
+option java_multiple_files = true;
+
+import "validate/validate.proto";
+import "common/gender_dto.proto";
+
+message HealerDto {
+    string description = 1;
+}
+
+message MastermindDto {
+    string description = 1;
+}
+
+message CounselorDto {
+    string description = 1;
+}
+
+message ArchitectDto {
+    string description = 1;
+}
+
+message PersonDto {
+    string id = 1;
+    string name = 2 [(validate.rules).string.len = 20];
+    string firstname = 3;
+    string dateOfBirth = 4;
+    GenderDto gender = 5;
+
+    oneof personality_type {
+        HealerDto healer = 6;
+        MastermindDto mastermind = 7;
+        CounselorDto counselor = 8;
+        ArchitectDto architect = 9;
+    }
+}

@@ -5,10 +5,10 @@ package de.grid.grpcdemo.grpc.service;
 option java_package = "de.grid.grpcdemo.adapter.grpc.service";
 option java_multiple_files = true;
 
-import "de.grid.grpcdemo.grpc/person.proto";
+import "de.grid.grpcdemo.grpc/person_dto.proto";
 
 message CreatePersonRequest {
-    Person person = 1;
+    PersonDto person = 1;
 }
 
 message CreatePersonResponse {
@@ -20,14 +20,14 @@ message QueryPersonRequest {
 }
 
 message QueryPersonResponse {
-    Person person = 1;
+    PersonDto person = 1;
 }
 
 message QueryAllPersonsRequest {
 }
 
 message QueryAllPersonsResponse {
-    repeated Person persons = 1;
+    repeated PersonDto persons = 1;
 }
 
 service PersonService {

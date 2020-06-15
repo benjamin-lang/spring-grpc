@@ -11,9 +11,9 @@ import java.util.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-class PersonServiceTest
+class PersonDomainServiceTest
 {
-    private final PersonService personService = new PersonService(new PersonRepositoryInMemory());
+    private final PersonDomainService personDomainService = new PersonDomainService(new PersonRepositoryInMemory());
     private final List<Person> testPeople = new ArrayList<>();
 
     @BeforeEach
@@ -23,7 +23,7 @@ class PersonServiceTest
         for (int i = 0; i < 3; i++)
         {
             Person testPerson = randomPerson();
-            personService.registerPerson(testPerson);
+            personDomainService.registerPerson(testPerson);
             testPeople.add(testPerson);
         }
     }
@@ -31,7 +31,7 @@ class PersonServiceTest
     private static Person randomPerson()
     {
         return new Person(UUID.randomUUID(), RandomStringUtils.randomAlphabetic(20), RandomStringUtils.randomAlphabetic(20)
-            , LocalDate.ofEpochDay(RandomUtils.nextLong(1, 10000)), Gender.MALE);
+            , LocalDate.ofEpochDay(RandomUtils.nextLong(1, 10000)), Gender.MALE, new Counselor());
     }
 
     @Test
@@ -39,9 +39,9 @@ class PersonServiceTest
     {
         Person person = randomPerson();
 
-        personService.registerPerson(person);
+        personDomainService.registerPerson(person);
 
-        Optional<Person> queriedPerson = personService.queryPerson(person.getId());
+        Optional<Person> queriedPerson = personDomainService.queryPerson(person.getId());
 
         assertTrue(queriedPerson.isPresent());
         assertEquals(person.getId(), queriedPerson.get().getId());
@@ -54,7 +54,7 @@ class PersonServiceTest
     @Test
     void queryPerson()
     {
-        Optional<Person> queriedPerson = personService.queryPerson(testPeople.get(0).getId());
+        Optional<Person> queriedPerson = personDomainService.queryPerson(testPeople.get(0).getId());
 
         assertTrue(queriedPerson.isPresent());
         assertEquals(testPeople.get(0).getId(), queriedPerson.get().getId());
@@ -67,7 +67,7 @@ class PersonServiceTest
     @Test
     void queryAll()
     {
-        List<Person> people = personService.queryAll();
+        List<Person> people = personDomainService.queryAll();
 
         assertTrue(Objects.nonNull(people.get(0)));
         assertEquals(testPeople.get(0).getId(), people.get(0).getId());
@@ -94,9 +94,9 @@ class PersonServiceTest
     @Test
     void removeAll()
     {
-        personService.removeAll();
+        personDomainService.removeAll();
 
-        List<Person> people = personService.queryAll();
+        List<Person> people = personDomainService.queryAll();
 
         assertEquals(0, people.size());
     }
@@ -104,9 +104,9 @@ class PersonServiceTest
     @Test
     void removePerson()
     {
-        personService.removePerson(testPeople.get(0).getId());
+        personDomainService.removePerson(testPeople.get(0).getId());
 
-        Optional<Person> person = personService.queryPerson(testPeople.get(0).getId());
+        Optional<Person> person = personDomainService.queryPerson(testPeople.get(0).getId());
 
         assertTrue(person.isEmpty());
     }
@@ -116,9 +116,9 @@ class PersonServiceTest
     {
         String newName = RandomStringUtils.randomAlphabetic(23);
 
-        personService.gotMarried(testPeople.get(0).getId(), newName);
+        personDomainService.gotMarried(testPeople.get(0).getId(), newName);
 
-        Optional<Person> person = personService.queryPerson(testPeople.get(0).getId());
+        Optional<Person> person = personDomainService.queryPerson(testPeople.get(0).getId());
 
         assertTrue(person.isPresent());
         assertEquals(newName, person.get().getName());

@@ -1,7 +1,9 @@
-package de.grid.springgrpc.adapter.grpc;
+package de.grid.springgrpc.adapter.grpc.controller;
 
 import de.grid.grpcdemo.adapter.grpc.service.*;
-import de.grid.springgrpc.domain.PersonService;
+import de.grid.springgrpc.adapter.grpc.mapping.MappingProto;
+import de.grid.springgrpc.domain.Person;
+import de.grid.springgrpc.domain.PersonDomainService;
 import io.envoyproxy.pgv.ReflectiveValidatorIndex;
 import io.envoyproxy.pgv.ValidationException;
 import io.envoyproxy.pgv.ValidatorIndex;
@@ -12,7 +14,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.util.StringUtils;
 
-import java.time.LocalDate;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
@@ -20,14 +21,17 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 @GRpcService
-public class PersonServiceGrpcImpl extends PersonServiceGrpc.PersonServiceImplBase
+public class PersonGrpcController extends PersonServiceGrpc.PersonServiceImplBase
 {
-    private static final Logger LOGGER = LoggerFactory.getLogger(PersonServiceGrpcImpl.class);
-    private final PersonService personService;
+    private static final Logger LOGGER = LoggerFactory.getLogger(PersonGrpcController.class);
 
-    public PersonServiceGrpcImpl(PersonService personService)
+    private final PersonDomainService personDomainService;
+    private final MappingProto mappingProto;
+
+    public PersonGrpcController(PersonDomainService personDomainService, MappingProto mappingProto)
     {
-        this.personService = personService;
+        this.personDomainService = personDomainService;
+        this.mappingProto = mappingProto;
     }
 
     @Override
@@ -41,25 +45,18 @@ public class PersonServiceGrpcImpl extends PersonServiceGrpc.PersonServiceImplBa
             responseObserver.onError(Status.FAILED_PRECONDITION.withDescription(e.getMessage()).asException());
         }
 
-        UUID personId = personService.registerPerson(map(request.getPerson()));
+        UUID personId = personDomainService.registerPerson(mappingProto.map(request.getPerson()));
 
         responseObserver.onNext(CreatePersonResponse.newBuilder().setPersonId(personId.toString()).build());
         responseObserver.onCompleted();
     }
 
-    private void validatePerson(Person person) throws ValidationException
+    private void validatePerson(PersonDto person) throws ValidationException
     {
         ValidatorIndex index = new ReflectiveValidatorIndex();
-        index.validatorFor(Person.class).assertValid(person);
+        index.validatorFor(PersonDto.class).assertValid(person);
     }
-    private de.grid.springgrpc.domain.Person map(Person person)
-    {
-        return new de.grid.springgrpc.domain.Person(map(person.getId())
-            , person.getName()
-            , person.getFirstname()
-            , LocalDate.parse(person.getDateOfBirth())
-            , de.grid.springgrpc.domain.Gender.valueOf(person.getGender().toString()));
-    }
+
 
     private UUID map(String id)
     {
@@ -74,19 +71,19 @@ public class PersonServiceGrpcImpl extends PersonServiceGrpc.PersonServiceImplBa
     {
         LOGGER.info("server received request with payload:'{}'", request);
 
-        Optional<de.grid.springgrpc.domain.Person> person = personService.queryPerson(UUID.fromString(request.getPersonId()));
+        Optional<Person> person = personDomainService.queryPerson(UUID.fromString(request.getPersonId()));
 
         if (person.isPresent())
         {
-            Person grpcPerson = Person.newBuilder()
+            PersonDto personDto = PersonDto.newBuilder()
                 .setId(person.get().getId().toString())
                 .setFirstname(person.get().getFirstname())
                 .setName(person.get().getName())
                 .setDateOfBirth(person.get().getDateOfBirth().toString())
-                .setGender(Gender.valueOf(person.get().getGender().toString()))
+                .setGender(GenderDto.valueOf(person.get().getGender().toString()))
                 .build();
 
-            responseObserver.onNext(QueryPersonResponse.newBuilder().setPerson(grpcPerson).build());
+            responseObserver.onNext(QueryPersonResponse.newBuilder().setPerson(personDto).build());
             responseObserver.onCompleted();
         } else
             responseObserver.onError(new NoSuchElementException(String.format("Person with id='%s' not found!", request.getPersonId())));
@@ -95,19 +92,12 @@ public class PersonServiceGrpcImpl extends PersonServiceGrpc.PersonServiceImplBa
     @Override
     public void queryAllPersons(QueryAllPersonsRequest request, StreamObserver<QueryAllPersonsResponse> responseObserver)
     {
-        List<de.grid.springgrpc.domain.Person> persons = personService.queryAll();
-        responseObserver.onNext(QueryAllPersonsResponse.newBuilder().addAllPersons(persons.stream().map(this::map).collect(Collectors.toList())).build());
-        responseObserver.onCompleted();
-    }
+        List<Person> persons = personDomainService.queryAll();
 
-    private Person map(de.grid.springgrpc.domain.Person person)
-    {
-        return Person.newBuilder()
-            .setId(person.getId().toString())
-            .setName(person.getName())
-            .setFirstname(person.getFirstname())
-            .setDateOfBirth(person.getDateOfBirth().toString())
-            .setGender(Gender.valueOf(person.getGender().toString()))
-            .build();
+        QueryAllPersonsResponse response = QueryAllPersonsResponse.newBuilder().addAllPersons(persons.stream().map(mappingProto::map)
+            .collect(Collectors.toList())).build();
+
+        responseObserver.onNext(response);
+        responseObserver.onCompleted();
     }
 }

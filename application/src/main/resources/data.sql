@@ -1,0 +1,1 @@
+insert into person (id, name, firstname, date_of_birth, gender) values ('3c1885b5d3a040d6b3265c6fdf9913ab', 'Time', 'Justin', '2020-06-10', 1)

@@ -5,7 +5,7 @@ package de.grid.grpcdemo.grpc.service;
 option java_package = "de.grid.grpcdemo.adapter.grpc.service";
 option java_multiple_files = true;
 
-enum Gender {
+enum GenderDto {
     MALE = 0;
     FEMALE = 1;
     OTHER = 2;

@@ -1,4 +1,4 @@
-package de.grid.springgrpc.adapter.grpc;
+package de.grid.springgrpc.adapter.grpc.controller;
 
 import de.grid.grpcdemo.adapter.grpc.service.CalculatePrimeFactorsRequest;
 import de.grid.grpcdemo.adapter.grpc.service.CalculatePrimeFactorsResponse;
@@ -9,9 +9,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 @GRpcService
-public class CalculatorServiceGrpcImpl extends CalculatorServiceGrpc.CalculatorServiceImplBase
+public class CalculatorGrpcController extends CalculatorServiceGrpc.CalculatorServiceImplBase
 {
-    private final Logger LOGGER = LoggerFactory.getLogger(CalculatorServiceGrpcImpl.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(CalculatorGrpcController.class);
 
     @Override
     public void calculatePrimeFactors(CalculatePrimeFactorsRequest request, StreamObserver<CalculatePrimeFactorsResponse> responseObserver)

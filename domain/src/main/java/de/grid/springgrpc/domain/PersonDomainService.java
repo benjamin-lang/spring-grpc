@@ -5,11 +5,11 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
 
-public class PersonService
+public class PersonDomainService
 {
     private final PersonRepository personRepository;
 
-    public PersonService(PersonRepository personRepository)
+    public PersonDomainService(PersonRepository personRepository)
     {
         this.personRepository = personRepository;
     }
@@ -19,7 +19,10 @@ public class PersonService
         if (Objects.isNull(person.getId()))
         {
             UUID personId = UUID.randomUUID();
-            personRepository.persist(new Person(personId, person.getName(), person.getFirstname(), person.getDateOfBirth(), person.getGender()));
+
+            personRepository.persist(new Person(personId, person.getName(), person.getFirstname(), person.getDateOfBirth(), person.getGender()
+                , person.getPersonalityType()));
+
             return personId;
         }
 
@@ -54,7 +57,8 @@ public class PersonService
         if (personOpt.isPresent())
         {
             Person person = personOpt.get();
-            personRepository.persist(new Person(person.getId(), newName, person.getFirstname(), person.getDateOfBirth(), person.getGender()));
+            personRepository.persist(new Person(person.getId(), newName, person.getFirstname(), person.getDateOfBirth(), person.getGender()
+                , person.getPersonalityType()));
         }
     }
 }
